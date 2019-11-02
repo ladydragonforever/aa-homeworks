@@ -30,26 +30,38 @@ class MyMap
     end
 
     def set(key,value)
+        # first need to check if key exist alreay not
+        keys = @u_array.map {|pair| pair[0]}
+        if keys.include?(key)
+            @u_array.each {|pair| pair[0] == key ? pair[1] = value :pair}
+        else
         @u_array << [key,value]
-        @u_array.each do |pair|
-            pair[1] = value if pair[0] == key 
         end
+        self
     end
 
     def get(key)
         @u_array.each do |pair|
-            return pair if pair[0] = key
+            return pair if pair[0] == key
         end
+        nil
+    
     end
 
     def delete(key)
-        @u_array.reject! do |pair|
-             if pair[0] = key
-        end
+        @u_array.reject! {|pair| pair[0] == key}
+        
     end
 
     def show
-        @u_array.dup
+       deep_dup(u_array)
+    end
+
+    private
+    attr_reader :u_array
+    def deep_dup(arr)
+        # @u_array.map {|sub| sub.dup}
+        arr.map {|sub| sub.is_a?(Array) ? deep_dup(sub) : sub}
     end
         
 end
